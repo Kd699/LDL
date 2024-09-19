@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LDL Development Accordion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .accordion {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .accordion-header {
+            background-color: #f8f8f8;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        .accordion-header:hover {
+            background-color: #e8e8e8;
+        }
+        .accordion-icon {
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+        .accordion-content {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .accordion-item.active > .accordion-header .accordion-icon {
+            transform: rotate(90deg);
+        }
+        .accordion-item.active > .accordion-content {
+            max-height: 1000px;
+            padding: 15px;
+        }
+        .nested {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>LDL Development Accordion</h1>
+    <div id="accordion" class="accordion"></div>
+
+    <script>
+        const LDLDevelopment = {
+            vector1: {
+                name: "What is LDL?",
+                subVectors: [
+                    {
+                        name: "Basic Definition",
+                        description: "LDL, or low-density lipoprotein, is a type of cholesterol that transports fats through the bloodstream. It's often called 'bad' cholesterol because high levels of LDL can lead to buildup in arteries."
+                    },
+                    {
+                        name: "Function in the Body",
+                        description: "LDL carries cholesterol to cells that need it, which is important for normal cell function. However, too much LDL can be harmful because it sticks to artery walls."
+                    },
+                    {
+                        name: "Why It Can Be Harmful",
+                        description: "If there's too much LDL in the blood, it starts to build up in the arteries. This buildup can narrow the arteries and restrict blood flow, which may lead to heart disease."
+                    }
+                ]
+            },
+            vector2: {
+                name: "How Does LDL Develop?",
+                subVectors: [
+                    {
+                        name: "Liver Production",
+                        description: "The liver produces LDL as part of its process of distributing fat molecules. LDL transports cholesterol from the liver to various parts of the body."
+                    },
+                    {
+                        name: "Diet Influence",
+                        description: "Foods high in unhealthy fats can increase the amount of LDL in your blood. These unhealthy fats trigger the liver to produce more LDL.",
+                        subVectors: [
+                            {
+                                name: "Types of Unhealthy Fats",
+                                description: "There are two main types of unhealthy fats that increase LDL: saturated fats and trans fats.",
+                                subVectors: [
+                                    {
+                                        name: "Saturated Fats",
+                                        description: "These fats are found in animal products such as butter, cheese, and red meat. Eating too much saturated fat raises LDL cholesterol levels."
+                                    },
+                                    {
+                                        name: "Trans Fats",
+                                        description: "Trans fats are found in processed foods, especially in baked goods and fried foods. They are even more harmful than saturated fats."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: "Genetic Factors",
+                        description: "Some people inherit a tendency to produce too much LDL, making them more likely to develop high cholesterol regardless of diet or lifestyle choices."
+                    }
+                ]
+            },
+            vector3: {
+                name: "What Can Be Done About High LDL?",
+                subVectors: [
+                    {
+                        name: "Dietary Changes",
+                        description: "Reducing saturated fats and trans fats in your diet can lower LDL levels. Eating more fiber, like oats and fruits, can also help reduce LDL."
+                    },
+                    {
+                        name: "Exercise",
+                        description: "Regular physical activity can raise 'good' HDL cholesterol and help lower 'bad' LDL cholesterol, improving overall heart health."
+                    },
+                    {
+                        name: "Medications",
+                        description: "In some cases, doctors prescribe medications called statins, which help lower LDL levels by reducing the liver's cholesterol production."
+                    }
+                ]
+            }
+        };
+
+        function createAccordionItem(item, isNested = false) {
+            const accordionItem = document.createElement('div');
+            accordionItem.className = `accordion-item${isNested ? ' nested' : ''}`;
+
+            const header = document.createElement('div');
+            header.className = 'accordion-header';
+            header.innerHTML = `
+                <span class="accordion-icon">▶</span>
+                <span>${item.name}</span>
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'accordion-content';
+
+            if (item.description) {
+                const description = document.createElement('p');
+                description.textContent = item.description;
+                content.appendChild(description);
+            }
+
+            if (item.subVectors) {
+                item.subVectors.forEach(subItem => {
+                    content.appendChild(createAccordionItem(subItem, true));
+                });
+            }
+
+            accordionItem.appendChild(header);
+            accordionItem.appendChild(content);
+
+            header.addEventListener('click', (event) => {
+                event.stopPropagation();
+                toggleAccordion(accordionItem);
+            });
+
+            return accordionItem;
+        }
+
+        function toggleAccordion(item) {
+            const isActive = item.classList.contains('active');
+            
+            // Close all sibling accordions
+            const siblings = item.parentElement.children;
+            for (let sibling of siblings) {
+                if (sibling !== item && sibling.classList.contains('accordion-item')) {
+                    sibling.classList.remove('active');
+                }
+            }
+
+            // Toggle the clicked accordion
+            item.classList.toggle('active');
+
+            // If opening this accordion, close all nested accordions
+            if (!isActive) {
+                const nestedAccordions = item.querySelectorAll('.accordion-item');
+                nestedAccordions.forEach(nested => nested.classList.remove('active'));
+            }
+        }
+
+        const accordionContainer = document.getElementById('accordion');
+
+        Object.values(LDLDevelopment).forEach(vector => {
+            accordionContainer.appendChild(createAccordionItem(vector));
+        });
+    </script>
+</body>
+</html>
