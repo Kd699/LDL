@@ -60,7 +60,9 @@
     <h1>LDL Development Accordion</h1>
     <div id="accordion" class="accordion"></div>
 
-    <script>
+    <script type="module">
+        import { vector4 } from './vector4.js';
+
         const LDLDevelopment = {
             vector1: {
                 name: "What is LDL?",
@@ -96,11 +98,41 @@
                                 subVectors: [
                                     {
                                         name: "Saturated Fats",
-                                        description: "These fats are found in animal products such as butter, cheese, and red meat. Eating too much saturated fat raises LDL cholesterol levels."
+                                        description: "These fats are found in animal products such as butter, cheese, and red meat. Eating too much saturated fat raises LDL cholesterol levels.",
+                                        subVectors: [
+                                            {
+                                                name: "Sources of Saturated Fats",
+                                                description: "These include fatty cuts of beef, pork, lamb, and dairy products like butter, cream, and cheese.",
+                                                subVectors: [
+                                                    {
+                                                        name: "How Saturated Fats Raise LDL",
+                                                        description: "Saturated fats trigger the liver to produce more LDL, which increases the amount circulating in the bloodstream.",
+                                                        subVectors: [
+                                                            {
+                                                                name: "Effects of Excess LDL",
+                                                                description: "Excess LDL can start to build up in the artery walls, creating plaque that restricts blood flow and may lead to heart disease."
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     },
                                     {
                                         name: "Trans Fats",
-                                        description: "Trans fats are found in processed foods, especially in baked goods and fried foods. They are even more harmful than saturated fats."
+                                        description: "Trans fats are found in processed foods, especially in baked goods and fried foods. They are even more harmful than saturated fats.",
+                                        subVectors: [
+                                            {
+                                                name: "Sources of Trans Fats",
+                                                description: "Trans fats are commonly found in partially hydrogenated oils, often used in fried foods, baked goods, and margarine.",
+                                                subVectors: [
+                                                    {
+                                                        name: "Impact of Trans Fats",
+                                                        description: "Trans fats not only raise LDL but also lower 'good' HDL cholesterol, which helps clear LDL from the bloodstream."
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -108,7 +140,17 @@
                     },
                     {
                         name: "Genetic Factors",
-                        description: "Some people inherit a tendency to produce too much LDL, making them more likely to develop high cholesterol regardless of diet or lifestyle choices."
+                        description: "Some people inherit a tendency to produce too much LDL, making them more likely to develop high cholesterol regardless of diet or lifestyle choices.",
+                        subVectors: [
+                            {
+                                name: "Familial Hypercholesterolemia",
+                                description: "This genetic condition causes very high levels of LDL, increasing the risk of heart disease at an early age."
+                            },
+                            {
+                                name: "Inherited LDL Receptor Deficiency",
+                                description: "Some people inherit fewer LDL receptors, which makes it difficult for their bodies to remove LDL from the bloodstream."
+                            }
+                        ]
                     }
                 ]
             },
@@ -117,57 +159,90 @@
                 subVectors: [
                     {
                         name: "Dietary Changes",
-                        description: "Reducing saturated fats and trans fats in your diet can lower LDL levels. Eating more fiber, like oats and fruits, can also help reduce LDL."
+                        description: "Reducing saturated fats and trans fats in your diet can lower LDL levels. Eating more fiber, like oats and fruits, can also help reduce LDL.",
+                        subVectors: [
+                            {
+                                name: "Increasing Fiber Intake",
+                                description: "Eating more soluble fiber, like oats, beans, and fruits, can help lower LDL by binding to cholesterol in the digestive system.",
+                                subVectors: [
+                                    {
+                                        name: "Sources of Soluble Fiber",
+                                        description: "Soluble fiber is found in foods like oats, lentils, apples, and citrus fruits, which help reduce LDL levels."
+                                    }
+                                ]
+                            },
+                            {
+                                name: "Healthy Fats",
+                                description: "Replacing saturated and trans fats with healthy fats like those from fish, nuts, and olive oil can reduce LDL.",
+                                subVectors: [
+                                    {
+                                        name: "Omega-3 Fatty Acids",
+                                        description: "Found in fatty fish like salmon, omega-3s help lower LDL and triglycerides while supporting heart health."
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         name: "Exercise",
-                        description: "Regular physical activity can raise 'good' HDL cholesterol and help lower 'bad' LDL cholesterol, improving overall heart health."
+                        description: "Regular physical activity can raise 'good' HDL cholesterol and help lower 'bad' LDL cholesterol, improving overall heart health.",
+                        subVectors: [
+                            {
+                                name: "How Exercise Affects LDL",
+                                description: "Regular physical activity increases 'good' HDL cholesterol and helps lower 'bad' LDL cholesterol."
+                            },
+                            {
+                                name: "Types of Exercise",
+                                description: "Aerobic exercises like walking, running, cycling, and swimming are effective in lowering LDL levels."
+                            }
+                        ]
                     },
                     {
                         name: "Medications",
                         description: "In some cases, doctors prescribe medications called statins, which help lower LDL levels by reducing the liver's cholesterol production."
                     }
                 ]
-            }
+            },
+            vector4: vector4
         };
 
         function createAccordionItem(item, isNested = false) {
             const accordionItem = document.createElement('div');
             accordionItem.className = `accordion-item${isNested ? ' nested' : ''}`;
-
+        
             const header = document.createElement('div');
             header.className = 'accordion-header';
             header.innerHTML = `
                 <span class="accordion-icon">▶</span>
                 <span>${item.name}</span>
             `;
-
+        
             const content = document.createElement('div');
             content.className = 'accordion-content';
-
+        
             if (item.description) {
                 const description = document.createElement('p');
                 description.textContent = item.description;
                 content.appendChild(description);
             }
-
+        
             if (item.subVectors) {
                 item.subVectors.forEach(subItem => {
                     content.appendChild(createAccordionItem(subItem, true));
                 });
             }
-
+        
             accordionItem.appendChild(header);
             accordionItem.appendChild(content);
-
+        
             header.addEventListener('click', (event) => {
                 event.stopPropagation();
                 toggleAccordion(accordionItem);
             });
-
+        
             return accordionItem;
         }
-
+        
         function toggleAccordion(item) {
             const isActive = item.classList.contains('active');
             
@@ -178,23 +253,22 @@
                     sibling.classList.remove('active');
                 }
             }
-
+        
             // Toggle the clicked accordion
             item.classList.toggle('active');
-
+        
             // If opening this accordion, close all nested accordions
             if (!isActive) {
                 const nestedAccordions = item.querySelectorAll('.accordion-item');
                 nestedAccordions.forEach(nested => nested.classList.remove('active'));
             }
         }
-
+        
         const accordionContainer = document.getElementById('accordion');
-
+        
         Object.values(LDLDevelopment).forEach(vector => {
             accordionContainer.appendChild(createAccordionItem(vector));
         });
     </script>
 </body>
 </html>
-
